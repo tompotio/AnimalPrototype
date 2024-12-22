@@ -4,7 +4,7 @@ local Neutral = setmetatable({}, State)
 Neutral.__index = Neutral
 
 function Neutral.new(parent)
-    local self = State.new(parent)
+    local self = State.new(parent, "Neutral")
     setmetatable(self, Neutral)
 
     self.coolDown = 0
@@ -19,6 +19,8 @@ function Neutral:Update(deltaT : number)
         local selectedStates = {}
 
         for _, state in self.parent.states do
+
+            -- Not adding neutral in the selection
             if state == self then
                 continue
             end
@@ -56,7 +58,7 @@ function Neutral:Update(deltaT : number)
         return selectedStates
     end
 
-    -- Select a new state among a list of proposed states.
+    -- Select a new state.
     local function selectNewState(selectedStates : table)
         local numberOfStates = #selectedStates
         
@@ -66,15 +68,14 @@ function Neutral:Update(deltaT : number)
         elseif numberOfStates == 1 then
             self.parent.currentState = selectedStates[1]
 
+        -- Pick one randomly.
         else
             local randomStateId = math.random(1, numberOfStates)
             self.parent.currentState = selectedStates[randomStateId]
         end
     end
 
-    -- CORE --
-
-    -- Basically allow the possibility to switch state every 10 seconds.
+    -- Switch state every 10 seconds.
     do 
         self.coolDown += deltaT
 

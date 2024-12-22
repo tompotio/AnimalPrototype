@@ -4,7 +4,7 @@ local Hungry = setmetatable({}, State)
 Hungry.__index = Hungry
 
 function Hungry.new(parent)
-    local self = State.new(parent)
+    local self = State.new(parent, "Hungry")
     setmetatable(self, Hungry)
 
     return self
@@ -19,11 +19,11 @@ function Hungry:Update(deltaT : number)
 
     self.parent:Speech("🍕")
 
-    local function findFood()
+    local function findFood(parentPosition : Vector3)
         local foodFound = nil
 
         for _, foodCriteria in self.parent.foodCriterias do 
-            foodFound = World.GetClosestFood(self.parent:GetInstance():GetPivot().Position, foodCriteria)
+            foodFound = World.GetClosestFood(parentPosition, foodCriteria)
             if foodFound then
                 break
             end
@@ -32,11 +32,19 @@ function Hungry:Update(deltaT : number)
         return foodFound
     end
 
-    local food = findFood()
+    local parentPosition : Vector3 = self.parent:GetInstance():GetPivot().Position
+    local food = findFood(parentPosition)
 
     if food then
         local destPosition = World.GetWorldInstancePosition(food.WorldInstance)
-        self.parent:Move(destPosition)
+
+        if (destPosition - parentPosition).Magnitude > .1 then 
+            self.parent:Move(destPosition)
+        
+        else
+            self.parent:SetHunger(self.parent:GetHunger() - .25)
+        end
+
     else 
         print("No food found")
     end

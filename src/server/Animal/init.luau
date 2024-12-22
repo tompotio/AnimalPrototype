@@ -44,7 +44,7 @@ function Animal.new(name : string, workspaceParent : Folder, spawnPosition : Vec
     self.hunger = 0
     self.thirst = 0
     self.energy = 100
-    self.coolDown = 0
+    self.coolDown = 0 -- update Cooldown
 
     self.maxHunger = 100
     self.maxThirst = 100
@@ -99,6 +99,14 @@ function Animal:Move(position : Vector3)
     end
 end
 
+function Animal:SetHunger(hunger)
+    self.hunger = math.min(math.max(0, hunger), 100)
+end
+
+function Animal:GetHunger() : number
+    return self.hunger
+end
+
 function Animal:Speech(dialog : string) 
     local Head : Part = self.worldInstance:FindFirstChild("Head")
 
@@ -109,6 +117,12 @@ function Animal:Speech(dialog : string)
     Chat:Chat(Head, dialog)
 
     self.lastSpeech = os.time()
+end
+
+function Animal:SetState(stateObj)
+    if stateObj:GetName() ~= self.currentState:GetName() then
+        self.worldInstance:SetAttribute("State", stateObj:GetName())
+    end
 end
 
 function Animal:GetInstance()
@@ -124,7 +138,11 @@ function Animal:Update(deltaT : number)
         self.coolDown = 0
     end
 
-    self.currentState:Update(deltaT)
+    if self.currentState:CheckCondition() then 
+        self.currentState:Update(deltaT)
+    else 
+        self.currentState:SwitchState()
+    end
 end
 
 return Animal
