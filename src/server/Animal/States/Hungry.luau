@@ -17,6 +17,8 @@ end
 function Hungry:Update(deltaT : number)
     local World = require(script.Parent.Parent.Parent.World)
 
+    self.parent:Speech("🍕")
+
     local function findFood()
         local foodFound = nil
 

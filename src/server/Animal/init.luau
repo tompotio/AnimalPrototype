@@ -13,11 +13,18 @@ Updated By : tompotio4
 --!strict
 
 --[=========================================[
-                IMPORTS          
+               IMPORTS          
 ]=========================================]
 local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PathfindingService = game:GetService("PathfindingService")
+
+local Chat = game:GetService("Chat")
+
+--[[
+local TextChatService = game:GetService("TextChatService")
+local TalkEvent = ReplicatedStorage:WaitForChild("Talk")
+]]
 
 local States = script.States
 local Neutral = require(States.Neutral)
@@ -54,6 +61,8 @@ function Animal.new(name : string, workspaceParent : Folder, spawnPosition : Vec
     self.pathParams = {}
     self.foodCriterias = {}
 
+    self.lastSpeech = 0
+
     return self
 end
 
@@ -88,6 +97,18 @@ function Animal:Move(position : Vector3)
 			self.humanoid.MoveToFinished:Wait()
         end
     end
+end
+
+function Animal:Speech(dialog : string) 
+    local Head : Part = self.worldInstance:FindFirstChild("Head")
+
+    if os.time() - self.lastSpeech < 5 then
+        return 
+    end
+    
+    Chat:Chat(Head, dialog)
+
+    self.lastSpeech = os.time()
 end
 
 function Animal:GetInstance()

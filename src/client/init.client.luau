@@ -58,3 +58,19 @@ RunService.RenderStepped:Connect(function(deltaT)
         warn("Critical Error during RenderStepped of camera : " .. error)
     end
 end)
+
+--[[ 
+    ============================================
+                        CHAT
+    ============================================
+]]
+
+local ChatService = game:GetService("Chat")
+ChatService.BubbleChatEnabled = true
+
+ChatService:SetBubbleChatSettings({
+	BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+	TextSize = 20,
+	Font = Enum.Font.Cartoon,
+    MaxDistance = 200
+})

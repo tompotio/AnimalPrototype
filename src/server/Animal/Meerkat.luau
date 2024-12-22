@@ -14,7 +14,7 @@ function Meerkat.new(name : string, workspaceParent : Folder, spawnPosition : Ve
     local self = Animal.new(name)
     setmetatable(self, Meerkat)
 
-    self.worldInstance = MeerkatModel:Clone() -- Il faudra que je mette les modèles des animaux dans un fichier spécifique...
+    self.worldInstance = MeerkatModel:Clone() -- Il faudra que je mette les modèles des animaux dans un dossier spécifique...
     self.worldInstance.Parent = workspaceParent
     self.worldInstance:MoveTo(spawnPosition)
     self.humanoid = self.worldInstance:FindFirstChild("Humanoid")

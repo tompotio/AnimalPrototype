@@ -13,8 +13,7 @@ function Neutral.new(parent)
 end
 
 function Neutral:Update(deltaT : number)
-    -- NESTED FUNCTIONS --
-
+    
     -- Creates a list of possible states.
     local function selectPossibleStates()
         local selectedStates = {}
