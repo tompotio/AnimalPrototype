@@ -13,7 +13,6 @@ function Neutral.new(parent)
 end
 
 function Neutral:Update(deltaT : number)
-    
     -- Creates a list of possible states.
     local function selectPossibleStates()
         local selectedStates = {}

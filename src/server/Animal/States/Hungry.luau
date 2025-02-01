@@ -11,7 +11,13 @@ function Hungry.new(parent)
 end
 
 function Hungry:CheckCondition()
-    return true
+    local hunger = self.parent:GetHunger()
+
+    if hunger > 50 then
+        return true
+    end
+
+    return false
 end
 
 function Hungry:Update(deltaT : number)
@@ -38,7 +44,7 @@ function Hungry:Update(deltaT : number)
     if food then
         local destPosition = World.GetWorldInstancePosition(food.WorldInstance)
 
-        if (destPosition - parentPosition).Magnitude > .1 then 
+        if (destPosition - parentPosition).Magnitude > .1 then
             self.parent:Move(destPosition)
         
         else
@@ -47,6 +53,8 @@ function Hungry:Update(deltaT : number)
 
     else 
         print("No food found")
+
+        self.parent:Speech(":(")
     end
 end
 

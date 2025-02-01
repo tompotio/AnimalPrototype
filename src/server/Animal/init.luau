@@ -6,8 +6,15 @@ Unless autorized.
 
 Explaination:
 
-Last Updated : 09.18.2024
+Last Updated : 12.23.2024
 Updated By : tompotio4
+
+
+Note : 
+
+Qu'est-ce qui est le mieux ?
+    - Chaque état correspond à une animation.
+        - Comment modéliser les états transitoires ? Pour lesquels entre deux états avec une animation différente, il y a une animation de transition ? Ex : assis -> debout
 
 ]========================================================================]
 --!strict
@@ -31,7 +38,7 @@ local Neutral = require(States.Neutral)
 local Hungry = require(States.Hungry)
 
 --[=========================================[
-                ABSTRACT CLASS          
+            ABSTRACT ANIMAL CLASS    
 ]=========================================]
 local Animal = {}
 Animal.__index = Animal
@@ -45,6 +52,7 @@ function Animal.new(name : string, workspaceParent : Folder, spawnPosition : Vec
     self.thirst = 0
     self.energy = 100
     self.coolDown = 0 -- update Cooldown
+    self.age = 0
 
     self.maxHunger = 100
     self.maxThirst = 100
@@ -99,6 +107,22 @@ function Animal:Move(position : Vector3)
     end
 end
 
+function Animal:SetEnergy(energy)
+    self.energy = math.min(math.max(0, energy), 100)
+end
+
+function Animal:GetEnergy()
+    return self.energy
+end
+
+function Animal:SetThirst(thirst)
+    self.thirst = math.min(math.max(0, thirst), 100)
+end
+
+function Animal:GetThirst()
+    return self.thirst
+end
+
 function Animal:SetHunger(hunger)
     self.hunger = math.min(math.max(0, hunger), 100)
 end
@@ -107,7 +131,7 @@ function Animal:GetHunger() : number
     return self.hunger
 end
 
-function Animal:Speech(dialog : string) 
+function Animal:Speech(dialog : string)
     local Head : Part = self.worldInstance:FindFirstChild("Head")
 
     if os.time() - self.lastSpeech < 5 then
@@ -119,10 +143,26 @@ function Animal:Speech(dialog : string)
     self.lastSpeech = os.time()
 end
 
-function Animal:SetState(stateObj)
-    if stateObj:GetName() ~= self.currentState:GetName() then
+--[[
+    @param state : State Object or String 
+    Some states do not have logic behind them, they can be just used as transition between other states.
+    Animations are triggered as soon as the state attribute is modified.
+]]
+function Animal:SetState(state)
+    --[[
+    if state:isA(classObject)
+
+        local currentInstanceState = self.worldInstance:GetAttribute()
+        if state ~= currentInstanceState then
+            self.worldInstance:SetAttribute("State", state)
+        end
+
+    elseif stateObj:GetName() ~= self.currentState:GetName()
+
+        if  then
         self.worldInstance:SetAttribute("State", stateObj:GetName())
     end
+    ]]
 end
 
 function Animal:GetInstance()

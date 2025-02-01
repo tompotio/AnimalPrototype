@@ -8,7 +8,7 @@ local Meerkat = setmetatable({}, Animal)
 Meerkat.__index = Meerkat
 
 --[=========================================[
-                CLASS          
+                CLASS
 ]=========================================]
 function Meerkat.new(name : string, workspaceParent : Folder, spawnPosition : Vector3)
     local self = Animal.new(name)
